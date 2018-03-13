@@ -169,7 +169,8 @@ public class InvokeMain extends ExtentReportsClassVersion3{
 			logger.log(Status.INFO, "DeleteFromCart flow started");
 			DeleteFromCart.Delete_Cart(driver);
 			System.out.println("After Delete from Cart");
-			logger.log(Status.INFO, "DeleteFromCart flow Ended");		
+			logger.log(Status.INFO, "DeleteFromCart flow Ended");
+			System.out.println("Invoke.xml");
 	}
 	
 	
