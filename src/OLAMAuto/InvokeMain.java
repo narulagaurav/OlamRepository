@@ -1,49 +1,40 @@
 package OLAMAuto;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestResult;
 import org.testng.Reporter;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.markuputils.ExtentColor;
-import com.aventstack.extentreports.markuputils.Markup;
-import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.entity.User;
 
 
 
 public class InvokeMain extends ExtentReportsClassVersion3{
-	 
+	public static List<User> users; 
 	
 	//public static WebDriver driver;
 	@BeforeMethod
 	public void initiateSetup(){
-		
+		ReadDataFromExcel();
 		System.setProperty("webdriver.chrome.driver","/Users/chdsez97152lADM/Desktop/chromedriver 3");
 		//report=new ExtentReports("/Users/chdsez97152lADM/Desktop/LearnAutomation.html");
 		driver=new ChromeDriver();
@@ -251,7 +242,7 @@ public class InvokeMain extends ExtentReportsClassVersion3{
 		//oSelect.selectByVisibleText("12 months");
 		driver.findElement(By.id("datepicker")).click(); //click field
 		driver.findElement(By.linkText("Next")).click(); //click next month
-		driver.findElement(By.linkText("28")).click(); //click day
+		driver.findElement(By.linkText("30")).click(); //click day
 		driver.findElement(By.id("cart-btn")).click();
 		Select qty=new Select (driver.findElement(By.xpath("//select[@class='swatch-select packaging']")));
 		System.out.println("After Selecting value from drop down");
@@ -308,6 +299,109 @@ public class InvokeMain extends ExtentReportsClassVersion3{
 		
 	}
 	
+
+public List<User> readExcel(String filePath,String fileName,String sheetName) throws IOException{
+
+    //Create an object of File class to open xlsx file
+
+    File file =    new File(filePath+"//"+fileName);
+    System.out.println("file file is " +file);
+
+    //Create an object of FileInputStream class to read excel file
+
+    FileInputStream inputStream = new FileInputStream(file);
+
+    Workbook Wrkbook = null;
+
+    //Find the file extension by splitting file name in substring  and getting only extension name
+
+    String fileExtensionName = fileName.substring(fileName.indexOf("."));
+
+    //Check condition if the file is xlsx file
+
+    if(fileExtensionName.equals(".xlsx")){
+
+    //If it is xlsx file then create object of XSSFWorkbook class
+
+    Wrkbook = new XSSFWorkbook(inputStream);
+
+    }
+
+    //Check condition if the file is xls file
+
+    else if(fileExtensionName.equals(".xls")){
+
+        //If it is xls file then create object of XSSFWorkbook class
+
+        Wrkbook = new HSSFWorkbook(inputStream);
+
+    }
+
+    //Read sheet inside the workbook by its name
+
+    Sheet WrkSheet = Wrkbook.getSheet(sheetName);
+
+    //Find number of rows in excel file
+
+    int rowCount = WrkSheet.getLastRowNum()-WrkSheet.getFirstRowNum();
+
+    //Create a loop over all the rows of excel file to read it
+    List<User> users=new ArrayList<User>();
+    for (int i = 1; i < rowCount+1; i++) {
+
+        Row row = WrkSheet.getRow(i);
+
+        //Create a loop to print cell values in a row
+        User user=new User();
+        for (int j = 0; j < row.getLastCellNum(); j++) {
+
+            //Print Excel data in console
+        	switch (j) {
+			case 0:
+				user.setUserName(row.getCell(j).getStringCellValue());
+				break;
+			case 1:
+				user.setPassword(row.getCell(j).getStringCellValue());
+				break;
+			default:
+				break;
+			}
+            System.out.print(row.getCell(j).getStringCellValue()+"|| ");
+        }
+        users.add(user);
+        System.out.println();
+
+    }
+	return users;
+
+    }
+
+    
+
+    //Main function is calling readExcel function to read data from excel file
+
+    public static void ReadDataFromExcel(){
+
+    //Create an object of ReadGuru99ExcelFile class
+
+    	InvokeMain objExcelFile = new InvokeMain();
+
+    //Prepare the path of excel file
+
+    String filePath = "/Users/chdsez97152lADM/Desktop";
+    System.out.println("filePath is " +filePath);
+
+    //Call read file method of the class to read data
+
+     try {
+		users=objExcelFile.readExcel(filePath,"OLAM.xlsx","OlamSheet");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+    }
+
 }
 
 /*@AfterMethod //AfterMethod annotation - This method executes after every test execution

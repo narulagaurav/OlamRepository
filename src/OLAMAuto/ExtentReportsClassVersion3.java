@@ -87,14 +87,14 @@ public class ExtentReportsClassVersion3{
 		//driver.quit();
 		}*/
 	
-	@Test
+//	@Test
 	public void passTest(){
 		logger = extent.createTest("passTest");
 		Assert.assertTrue(true);
 		logger.log(Status.PASS, MarkupHelper.createLabel("Test Case Passed is passTest", ExtentColor.GREEN));
 	}
 	
-	@Test
+	//@Test
 	public void failTest(){
 		logger = extent.createTest("failTest");
 		Assert.assertTrue(true);
@@ -102,7 +102,7 @@ public class ExtentReportsClassVersion3{
 		logger.log(Status.PASS, MarkupHelper.createLabel("Test Case (failTest) Status is passed", ExtentColor.GREEN));
 	}
 	
-	@Test
+	//@Test
 	public void skipTest(){
 		logger = extent.createTest("skipTest");
 		throw new SkipException("Skipping - This is not ready for testing ");

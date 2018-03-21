@@ -33,8 +33,8 @@ public class Login{
 		}
 		//email.click();
 		//driver.findElement(By.id("email")).sendKeys("testcustomertomato@mail.com");
-		email.sendKeys("testcustomertomato@mail.com");
-		driver.findElement(By.id("pass")).sendKeys("Admin1234$");
+		email.sendKeys(InvokeMain.users.get(0).getUserName());
+		driver.findElement(By.id("pass")).sendKeys(InvokeMain.users.get(0).getPassword());
 		driver.findElement(By.id("send2")).click();
      
         }
