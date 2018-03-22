@@ -13,6 +13,8 @@ public class Login{
 	
 	public static void login_olam(WebDriver driver){
 		
+		
+		
 	/*	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);*/
 		WebElement element = driver.findElement(By.xpath("//a[text()='My Account']"));
 		Actions action = new Actions(driver);
