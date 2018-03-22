@@ -10,6 +10,7 @@ public class PlaceOrder {
 	
 	public static void PlaceOrder_Olam(WebDriver driver)
 	{
+		
 		System.out.println("Inside Place Order");
 		//driver.findElement(By.id("agreement_1")).click();
 		WebDriverWait wait=new WebDriverWait(driver, 30);
